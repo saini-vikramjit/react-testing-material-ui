@@ -4,18 +4,22 @@ import axios from "axios";
 
 import ScoopOption from "./ScoopOption";
 import ToppingOption from "./ToppingOption";
+import AlertBanner from "../../commons/AlertBanner";
 
 const Options = ({optionType}) => {
     const [items, setItems] = useState([]);
+    const[error, setError] = useState(false);
 
     useEffect(() => {
         axios
             .get(`http://localhost.com:3000/${optionType}`)
             .then((response) => { setItems(response.data); })
-            .catch((error) => {
-                console.warn('Error occured');
-            });
-    }, [optionType])
+            .catch((error) => setError(true));
+    }, [optionType]);
+
+    if (error) {
+        return <AlertBanner alertType="error" />
+    }
 
     const ItemComponent = optionType === 'scoops' ? ScoopOption : ToppingOption;
 
