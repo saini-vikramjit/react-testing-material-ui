@@ -1,14 +1,17 @@
-import SummaryForm from './pages/summary/SummaryForm';
+import { Container } from '@material-ui/core';
 
-import './App.css';
+// import SummaryForm from './pages/summary/SummaryForm';
 import OrderEntry from './pages/entry/OrderEntry';
+
+import { OrderDetailsProvider } from './commons/OrderDetails';
 
 const App = () => {
     return (
-        <div className="App">
-            <OrderEntry />
-            <SummaryForm />
-        </div>
+        <Container>
+            <OrderDetailsProvider>
+                <OrderEntry />
+            </OrderDetailsProvider>
+        </Container>
     );
 };
 
