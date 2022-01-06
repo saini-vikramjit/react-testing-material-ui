@@ -1,7 +1,21 @@
-const ToppingOption = ({name, imagePath}) => {
+import { Checkbox } from '@material-ui/core';
+
+const ToppingOption = ({name, imagePath, updateItemCount}) => {
+
+    const onChangeHandler = (e) => {
+        updateItemCount(name, e.target.checked ? 1 : 0);
+    };
+
     return (
         <div>
-            <img src={`http://localhost.com/${imagePath}`} alt={`${name} topping`} />
+            <img
+                src={`http://localhost:3030/${imagePath}`} 
+                alt={`${name} topping`}
+            />
+            <Checkbox
+                onChange={onChangeHandler}
+                inputProps={{ 'aria-label': `${name}-checkbox` }}
+            />
         </div>
     )
 }

@@ -12,7 +12,7 @@ const ScoopOption = ({name, imagePath, updateItemCount}) => {
     return (
         <div>
             <img
-                src={`http://localhost.com/${imagePath}`} 
+                src={`http://localhost:3030/${imagePath}`} 
                 alt={`${name} scoop`}
             />
             <TextField

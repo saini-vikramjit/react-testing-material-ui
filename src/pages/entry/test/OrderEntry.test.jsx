@@ -7,7 +7,7 @@ import OrderEntry from "../OrderEntry";
 
 test('handles server error for scoops and toppings', async () => {
     server.resetHandlers(
-        rest.get('http://localhost.com:3000/scoops', (req, res, ctx) => {
+        rest.get('http://localhost:3030/scoops', (req, res, ctx) => {
             return res(
                 ctx.status(500),
                 ctx.json({
@@ -16,7 +16,7 @@ test('handles server error for scoops and toppings', async () => {
             )
             
         }),
-        rest.get('http://localhost.com:3000/toppings', (req, res, ctx) => {
+        rest.get('http://localhost:3030/toppings', (req, res, ctx) => {
             return res(
                 ctx.status(500),
                 ctx.json({

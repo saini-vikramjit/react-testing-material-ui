@@ -12,6 +12,8 @@ import { useOrderDetails } from '../../commons/OrderDetails';
 
 import { pricePerItem } from "../../constants";
 
+import { currencyFormater } from '../../utils/index';
+
 const Options = ({optionType}) => {
     const [items, setItems] = useState([]);
     const[error, setError] = useState(false);
@@ -19,7 +21,7 @@ const Options = ({optionType}) => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost.com:3000/${optionType}`)
+            .get(`http://localhost:3030/${optionType}`)
             .then((response) => { setItems(response.data); })
             .catch((error) => setError(true));
     }, [optionType]);
@@ -42,8 +44,8 @@ const Options = ({optionType}) => {
     return (
         <>
             <div>{upperFirst(optionType)}</div>
-            <div>{`${pricePerItem[optionType]} each`}</div>
-            <div>{`${upperFirst(optionType)} total: $${orderDetails.totals[optionType]}`}</div>
+            <div>{ currencyFormater(pricePerItem[optionType]) } each</div>
+            <div>{`${upperFirst(optionType)} total: ${orderDetails.totals[optionType]}`}</div>
             <div>{optionItems}</div>
         </>
     );

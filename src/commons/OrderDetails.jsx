@@ -2,13 +2,7 @@ import { createContext, useContext, useState, useMemo, useEffect } from "react";
 
 import { pricePerItem } from '../constants/index';
 
-const currencyFormater = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-    }).format(amount);
-};
+import { currencyFormater } from '../utils/index';
 
 const OrderDetails = createContext();
 
@@ -25,7 +19,7 @@ const useOrderDetails = () => {
 
 const calculateSubTotal = (optionType, optionCounts) => {
     let optionCount = 0;
-    for(const count of optionCounts[optionType]) {
+    for(const count of optionCounts[optionType].values()) {
         optionCount += parseInt(count);
     }
     return optionCount * pricePerItem[optionType];
@@ -39,11 +33,12 @@ const OrderDetailsProvider = (props) => {
         }
     );
 
+    const zeroCurrency = currencyFormater(0);
     const [totals, setTotals] = useState(
         {
-            scoops: 0,
-            toppings: 0,
-            grandTotal: 0,
+            scoops: zeroCurrency,
+            toppings: zeroCurrency,
+            grandTotal: zeroCurrency,
         }
     );
 
@@ -53,9 +48,9 @@ const OrderDetailsProvider = (props) => {
         const grandTotal = scoopsSubTotal + toppingsSubTotal;
 
         setTotals({
-            scoops: scoopsSubTotal,
-            toppings: toppingsSubTotal,
-            grandTotal,
+            scoops: currencyFormater(scoopsSubTotal),
+            toppings: currencyFormater(toppingsSubTotal),
+            grandTotal: currencyFormater(grandTotal),
         });
         
     }, [optionCounts]);
@@ -63,6 +58,7 @@ const OrderDetailsProvider = (props) => {
     const value = useMemo(() => {
         const updateItemCount = (itemName, newItemCount, optionType) => {
             const newOptionCounts = { ...optionCounts };
+
             const optionCountMap = optionCounts[optionType];
             optionCountMap.set(itemName, parseInt(newItemCount));
 
