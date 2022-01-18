@@ -5,6 +5,8 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { PHASES } from '../../constants';
+
 const useStyles = makeStyles((theme) => ({
     popover: {
         pointerEvents: 'none',
@@ -17,9 +19,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const SummaryForm = () => {
-
+const SummaryForm = (props) => {
     const classes = useStyles();
+    const { phaseChangeHandler } = props;
 
     const [tcChecked, setTcChecked] = useState(true);
     const checkboxHandler = () => {
@@ -44,6 +46,9 @@ const SummaryForm = () => {
                 onChange={checkboxHandler}
                 name="checkedB"
                 color="primary"
+                inputProps={{
+                    "data-testid": 'terms-checkbox',
+                }}
             />
             <Typography
                 aria-owns={open ? 'mouse-over-popover' : undefined}
@@ -60,6 +65,7 @@ const SummaryForm = () => {
                 disabled={tcChecked}
                 size="large"
                 variant="contained"
+                onClick={() => phaseChangeHandler(PHASES.COMPLETE)}
             >
                 Confirm Order
             </Button>

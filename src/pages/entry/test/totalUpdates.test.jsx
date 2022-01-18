@@ -7,7 +7,7 @@ import OrderEntry from '../OrderEntry';
 
 // import { OrderDetailsProvider } from '../../../commons/OrderDetails'; 
 
-test.skip('check scoops subtotal with total scoops', async () => {
+test('check scoops subtotal with total scoops', async () => {
     render(<Options optionType="scoops" />);
 
     // check initial scoopsTotal
@@ -27,7 +27,7 @@ test.skip('check scoops subtotal with total scoops', async () => {
     expect(scoopsTotal).toHaveTextContent('6.00');
 });
 
-test.skip('check topping subtotal with total toppings', async () => {
+test('check topping subtotal with total toppings', async () => {
     render(<Options optionType="toppings" />);
 
     // check the initial toppingsTotal
@@ -49,14 +49,14 @@ test.skip('check topping subtotal with total toppings', async () => {
 
 describe('grand total', () => {
     test('grand total starts at $0.00', () => {
-        render(<OrderEntry />);
+        render(<OrderEntry phaseChangeHandler={jest.fn()} />);
 
         const grandTotal = screen.getByText('Grand Total: ', { exact: false });
         expect(grandTotal).toHaveTextContent('0.00');
 
     });
     test('grand total is updated properly if scoop is added first', async () => {
-        render(<OrderEntry />);
+        render(<OrderEntry phaseChangeHandler={jest.fn()} />);
 
         const chocolateScoop = await screen.findByTestId("Chocolate-count");
         userEvent.clear(chocolateScoop);
@@ -67,7 +67,7 @@ describe('grand total', () => {
 
     });
     test('grand total updates properly if topping is added first', async () => {
-        render(<OrderEntry />);
+        render(<OrderEntry phaseChangeHandler={jest.fn()} />);
 
         const gummibearsTopping = await screen.findByRole('checkbox', { name: /Gummi bears-checkbox/i });
         userEvent.click(gummibearsTopping);
@@ -75,7 +75,7 @@ describe('grand total', () => {
         expect(grandTotal).toHaveTextContent('1.50');
     });
     test('grand total is updated properly if item is removed', async () => {
-        render(<OrderEntry />);
+        render(<OrderEntry phaseChangeHandler={jest.fn()} />);
 
         const chocolateScoop = await screen.findByTestId("Chocolate-count");
         userEvent.clear(chocolateScoop);

@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 
-import { useOrderDetails } from '../../commons/OrderDetails';
+import { useOrderDetails } from '../../context/OrderDetails';
 
 const GrandTotal = () => {
     
@@ -9,7 +9,8 @@ const GrandTotal = () => {
     return (
         <Typography
             color="primary"
-            variant="h2"
+            variant="h4"
+            align="right"
         >
             Grand Total: {orderDetails.totals.grandTotal}
         </Typography>

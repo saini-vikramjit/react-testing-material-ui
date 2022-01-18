@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Grid, Typography } from '@material-ui/core';
 
 import axios from "axios";
 
@@ -8,7 +9,7 @@ import ScoopOption from "./ScoopOption";
 import ToppingOption from "./ToppingOption";
 import AlertBanner from "../../commons/AlertBanner";
 
-import { useOrderDetails } from '../../commons/OrderDetails';
+import { useOrderDetails } from '../../context/OrderDetails';
 
 import { pricePerItem } from "../../constants";
 
@@ -43,10 +44,39 @@ const Options = ({optionType}) => {
 
     return (
         <>
-            <div>{upperFirst(optionType)}</div>
-            <div>{ currencyFormater(pricePerItem[optionType]) } each</div>
-            <div>{`${upperFirst(optionType)} total: ${orderDetails.totals[optionType]}`}</div>
-            <div>{optionItems}</div>
+            <Grid item>
+                <Typography
+                    variant="subtitle1"
+                    color="primary"
+                >
+                    {upperFirst(optionType)}
+                </Typography>
+            </Grid>
+            <Grid item>
+                <Typography
+                    variant="subtitle2"
+                    color="textPrimary"
+                >
+                    { currencyFormater(pricePerItem[optionType]) } each
+                </Typography>
+            </Grid>
+            <Grid item>
+                <Typography
+                    variant="subtitle2"
+                    color="textSecondary"
+                >
+                    {`${upperFirst(optionType)} total: ${orderDetails.totals[optionType]}`}
+                </Typography>
+            </Grid>
+            <Grid
+                item
+                container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+            >
+                {optionItems}
+            </Grid>
         </>
     );
 }

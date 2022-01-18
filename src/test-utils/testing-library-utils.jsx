@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { OrderDetailsProvider } from '../commons/OrderDetails';
+import { OrderDetailsProvider } from '../context/OrderDetails';
 
 const renderWithContext = (ui, options) => render(ui, { wrapper: OrderDetailsProvider, ...options });
 

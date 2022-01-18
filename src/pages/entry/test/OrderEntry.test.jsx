@@ -26,7 +26,7 @@ test('handles server error for scoops and toppings', async () => {
         })
     )
 
-    render(<OrderEntry />);
+    render(<OrderEntry phaseChangeHandler={jest.fn()} />);
 
     await waitFor( async () => {
         const alerts = await screen.findAllByRole('alert');

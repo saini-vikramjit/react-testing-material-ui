@@ -1,10 +1,14 @@
+import React, { useState, useEffect } from 'react';
+
+import axios from 'axios';
+import { isNull } from 'lodash';
+
 import { Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Options from "./Options"; 
-import GrandTotal from './GrandTotal';
-
 import { PHASES } from '../../constants';
+
+import { useOrderDetails } from '../../context/OrderDetails';
 
 const useStyles = makeStyles((theme) => ({
     containerStyle: {
@@ -12,10 +16,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const OrderEntry = (props) => {
+const OrderConfirmation = (props) => {
     const classes = useStyles();
+
+    const [,,resetOrder] = useOrderDetails();
+
+    const [orderNumber, setOrderNumber] = useState(null);
+
+    useEffect(() => {
+        axios
+            .post('http://localhost:3030/order')
+            .then((response) => {
+                setOrderNumber(response.data.orderNumber);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }, []);
+
     const { phaseChangeHandler } = props;
 
+    const onClickHandler = () => {
+        resetOrder();
+        phaseChangeHandler(PHASES.IN_PROGRESS);
+    }
+
+    if (isNull(orderNumber)) {
+        return (
+            <p>Loading</p>
+        )
+    }
     return (
         <Grid
             container
@@ -30,7 +60,7 @@ const OrderEntry = (props) => {
                     display="block"
                     gutterBottom
                     variant="h2"
-                >Design your Sundae!</Typography>
+                >Thank You</Typography>
             </Grid>
             <Grid
                 item
@@ -40,20 +70,7 @@ const OrderEntry = (props) => {
                 alignItems="flex-start"
                 className={classes.containerStyle}
             >
-                <Options optionType="scoops" />
-            </Grid>
-            <Grid
-                item
-                container
-                direction="column"
-                justifyContent="flex-start"
-                alignItems="flex-start"
-                className={classes.containerStyle}
-            >
-                <Options optionType="toppings" />
-            </Grid>
-            <Grid item className={classes.containerStyle}>
-                <GrandTotal />
+                <p>Your order nunber is {orderNumber}</p>
             </Grid>
             <Grid
                 item
@@ -69,14 +86,14 @@ const OrderEntry = (props) => {
                         // disabled
                         size="medium"
                         variant="outlined"
-                        onClick={() => phaseChangeHandler(PHASES.IN_REVIEW)}
+                        onClick={onClickHandler}
                     >
-                        Order Sundae!
+                        Create New Order
                     </Button>
                 </Grid>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
-export default OrderEntry;
+export default OrderConfirmation;
