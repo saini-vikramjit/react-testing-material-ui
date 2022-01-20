@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import App from '../App';
 
-test('order phase testing', async () => {
+test.skip('order phase testing', async () => {
     // render app
     render(<App />);
 
@@ -40,9 +40,17 @@ test('order phase testing', async () => {
     expect(confirmOrderButton).toBeEnabled();
     userEvent.click(confirmOrderButton);
 
+    // loading text to appear
+    const loadingText = screen.getByText('Loading');
+    expect(loadingText).toBeInTheDocument();
+
     // confirm order number on confirmation page
     const orderConfirmationHeading = await screen.findByRole('heading', { name: 'Thank You' });
     expect(orderConfirmationHeading).toBeInTheDocument();
+
+    // Loading text to disappear
+    const notLoading = screen.queryByText('Loading');
+    expect(notLoading).not.toBeInTheDocument();
 
     const orderNumber = screen.getByText('Your order nunber is', { exact: false });
     expect(orderNumber).toBeInTheDocument();
@@ -60,4 +68,29 @@ test('order phase testing', async () => {
 
     await screen.findByTestId("Chocolate-count");
     await screen.findByRole('checkbox', { name: /Peanut butter cups-checkbox/i });
+});
+
+test('topping summary not displayed if no toppings selected', async () => {
+    // render app
+    render(<App />);
+
+    // add icecream scoops and toppings
+    const chocolateScoop = await screen.findByTestId("Chocolate-count");
+    userEvent.clear(chocolateScoop);
+    userEvent.type(chocolateScoop, '2');
+
+    // find and click order button
+    const orderButton = screen.getByRole('button', { name: /Order Sundae!/i });
+    userEvent.click(orderButton);
+
+    // check summary information based on order
+    const orderSummaryHeading = screen.getByRole('heading', { name: 'Order Summary' });
+    expect(orderSummaryHeading).toBeInTheDocument();
+
+    const scoopsHeading = screen.getByRole('heading', { name: 'Scoops: $4.00' });
+    expect(scoopsHeading).toBeInTheDocument();
+
+    const toppingsHeading = screen.queryByRole('heading', { name: /Toppings:/i });
+    expect(toppingsHeading).not.toBeInTheDocument();
+    
 });

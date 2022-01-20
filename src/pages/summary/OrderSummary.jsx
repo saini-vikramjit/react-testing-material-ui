@@ -1,6 +1,8 @@
 import { Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { size } from 'lodash';
+
 import SummaryForm from './SummaryForm';
 import GrandTotal from '../entry/GrandTotal';
 import ListOrderItems from './ListOrderItems';
@@ -22,6 +24,23 @@ const OrderSummary = (props) => {
 
     const scoopArr = Array.from(orderDetails.scoops.entries());
     const toppingArr = Array.from(orderDetails.toppings.entries());
+
+    const ToppingsDisplay = () => {
+        return (size(toppingArr) > 0) && (
+            <>
+                <Typography
+                    color="primary"
+                    align="center"
+                    display="block"
+                    gutterBottom
+                    variant="h4"
+                >
+                    Toppings: {toppings}
+                </Typography>
+                <ListOrderItems items={toppingArr} />
+            </>
+        );
+    };
 
     return (
         <Grid
@@ -64,14 +83,7 @@ const OrderSummary = (props) => {
                 alignItems="flex-start"
                 className={classes.containerStyle}
             >
-                <Typography
-                    color="primary"
-                    align="center"
-                    display="block"
-                    gutterBottom
-                    variant="h4"
-                >Toppings: {toppings}</Typography>
-                <ListOrderItems items={toppingArr} />
+                <ToppingsDisplay />
             </Grid>
             <Grid item className={classes.containerStyle}>
                 <GrandTotal />

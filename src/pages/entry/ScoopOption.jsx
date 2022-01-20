@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { TextField, Grid, Avatar } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -17,8 +19,17 @@ const useStyles = makeStyles((theme) => ({
 const ScoopOption = ({name, imagePath, updateItemCount}) => {
     const classes = useStyles();
 
+    const [isInvalid, setIsInvalid] = useState(true);
+
     const onChangeHandler = (e) => {
-        updateItemCount(name, e.target.value);
+        const currentValue = e.target.value;
+        const currentValueFloat = parseFloat(currentValue);
+
+        const valueIsValid = 0 <= currentValueFloat && currentValueFloat <= 10 && Math.floor(currentValueFloat) === currentValueFloat;
+
+        setIsInvalid(valueIsValid);
+
+        if (valueIsValid) updateItemCount(name, e.target.value);
     };
 
 
@@ -47,6 +58,7 @@ const ScoopOption = ({name, imagePath, updateItemCount}) => {
                     defaultValue={0}
                     onChange={onChangeHandler}
                     variant="filled"
+                    error={!isInvalid}
                     inputProps={{
                         "data-testid": `${name}-count`,
                     }}

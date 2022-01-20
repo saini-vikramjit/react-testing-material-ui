@@ -10,6 +10,8 @@ import { PHASES } from '../../constants';
 
 import { useOrderDetails } from '../../context/OrderDetails';
 
+import AlertBanner from '../../commons/AlertBanner';
+
 const useStyles = makeStyles((theme) => ({
     containerStyle: {
         paddingTop: '20px',
@@ -18,10 +20,12 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderConfirmation = (props) => {
     const classes = useStyles();
-
-    const [,,resetOrder] = useOrderDetails();
+    const { phaseChangeHandler } = props;
 
     const [orderNumber, setOrderNumber] = useState(null);
+    const[error, setError] = useState(false);
+
+    const [,,resetOrder] = useOrderDetails();
 
     useEffect(() => {
         axios
@@ -30,15 +34,17 @@ const OrderConfirmation = (props) => {
                 setOrderNumber(response.data.orderNumber);
             })
             .catch((err) => {
-                console.error(err);
+                setError(true);
             });
     }, []);
-
-    const { phaseChangeHandler } = props;
 
     const onClickHandler = () => {
         resetOrder();
         phaseChangeHandler(PHASES.IN_PROGRESS);
+    }
+
+    if (error) {
+        return <AlertBanner alertType="error" />
     }
 
     if (isNull(orderNumber)) {

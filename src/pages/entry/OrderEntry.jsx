@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Options from "./Options"; 
 import GrandTotal from './GrandTotal';
 
+import { useOrderDetails } from '../../context/OrderDetails';
+
 import { PHASES } from '../../constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +17,10 @@ const useStyles = makeStyles((theme) => ({
 const OrderEntry = (props) => {
     const classes = useStyles();
     const { phaseChangeHandler } = props;
+
+    const [ orderDetails ] = useOrderDetails();
+
+    const orderBtnDisabled = (orderDetails.totals.scoops === "$0.00") ? true : false;
 
     return (
         <Grid
@@ -66,7 +72,7 @@ const OrderEntry = (props) => {
                 <Grid item>
                     <Button
                         color="primary"
-                        // disabled
+                        disabled={orderBtnDisabled}
                         size="medium"
                         variant="outlined"
                         onClick={() => phaseChangeHandler(PHASES.IN_REVIEW)}
